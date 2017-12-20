@@ -1,0 +1,76 @@
+{% extends 'widgets/widget_template.html' %}
+{% load custom_template %}
+
+{% block title_color %}{{ title_color|default:'white' }}{% endblock %}
+{% block title_text_color %}{{ title_text_color|default:'rgb(101, 71, 150)' }}{% endblock %}
+{% block body_color %}{{ body_color|default:'white' }}{% endblock %}
+{% block body_text_color %}{{ body_text_color|default:'black' }}{% endblock %}
+{% block custom_title_prop %}{% if title_logo %}style="background-size: auto 60%; background-position: 50%; background-repeat: no-repeat; background-image: url('/app_resource/{{ title_logo }}');"{% endif %}{% endblock %}
+{% block title1 %}{{ title1 }}{% endblock %}
+{% block title2 %}{{ title2 }}{% endblock %}
+{% block custom_tools %}
+{% endblock %}
+
+{% block widget_content %} <!-- Main Start Block -->
+
+<div style="overflow: auto; width: 100%; height: 100%; padding-left:10px; padding-right:10px">
+    <!-- Main Div -->
+    <script>console.log({{ result }});</script>
+        {% if result %}
+            <h2>{{ result.data.value }} <small>{{ result.data.status.name }}</small></h2>
+            <h3 class="">Attributes</h3>
+            <table id="tq_summarize_attrib" class="table dataTable no-footer">
+                <thead>
+                    <th>Name</th>
+                    <th>Value</th>
+                </thead>
+                <tbody>
+                    {% for attribute in result.data.attributes %}
+                        <tr>
+                            <td>{{ attribute.name }}</td>
+                            <td>{{ attribute.value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3 class="">Related Indicators</h3>
+            <table class="table dataTable no-footer">
+                <thead>
+                    <th>Indicator</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                </thead>
+                <tbody>
+                    {% for ind in result.data.indicators %}
+                        <tr>
+                            {% if ind.type.name == 'IP Address' %}
+                                <td>{{ ind.value }} <span onclick="context_menu(this, [{'contains': ['ip'], 'value': '{{ ind.value }}' }], 0, {{ container.id }}, null, false);" class="fa fa-caret-down"></span></td>
+                            {% elif ind.type.name == 'FQDN' %}
+                                <td>{{ ind.value }} <span onclick="context_menu(this, [{'contains': ['domain'], 'value': '{{ ind.value }}' }], 0, {{ container.id }}, null, false);" class="fa fa-caret-down"></span></td>
+                            {% elif ind.type.name == 'Email Address' %}
+                                <td>{{ ind.value }} <span onclick="context_menu(this, [{'contains': ['email'], 'value': '{{ ind.value }}' }], 0, {{ container.id }}, null, false);" class="fa fa-caret-down"></span></td>
+                            {% elif ind.type.name == 'URL' %}
+                                <td>{{ ind.value }} <span onclick="context_menu(this, [{'contains': ['url'], 'value': '{{ ind.value }}' }], 0, {{ container.id }}, null, false);" class="fa fa-caret-down"></span></td>
+                            {% else %}
+                                <td>{{ ind.value }} <span onclick="context_menu(this, [{'contains': ['hash', 'string'], 'value': '{{ ind.value }}' }], 0, {{ container.id }}, null, false);" class="fa fa-caret-down"></span></td>
+                            {% endif %}
+                            <td>{{ ind.type.name }}</td>
+                            <td>{{ ind.status.name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3 class="">Related Adversaries</h3>
+            {% for adv in result.data.adversaries %}
+                <h4><a href="{{ adv.url }}">{{ adv.name }}</a> <small>{{ adv.source_name }}</small></h4>
+            {% endfor %}
+        {% endif %}
+</div>
+<!-- Main Div -->
+<script type="text/javascript">
+$(document).ready(function () {
+$('#tq_summarize_attrib').DataTable();
+});
+</script>
+{% endblock %}
+<!-- Main Start Block -->
