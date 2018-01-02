@@ -7,8 +7,8 @@
     "type": "information",
     "license": "Copyright (c) 2016 ThreatQuotient, Inc.",
     "main_module": "threatq_app.pyc",
-    "app_version": "1.0.1",
-    "utctime_updated": "2016-12-15T15:00:00.000000Z",
+    "app_version": "1.0.2",
+    "utctime_updated": "2018-01-02T20:46:24.000000Z",
     "product_vendor": "ThreatQuotient",
     "product_name": "ThreatQ",
     "product_version_regex": ".*",
@@ -46,671 +46,884 @@
             "order": 4
         }
     },
-    "actions": [{
-        "action": "test connectivity",
-        "description": "Validate the asset configuration for connectivity.",
-        "type": "test",
-        "identifier": "test_asset_connectivity",
-        "read_only": true,
-        "parameters": {},
-        "output": [],
-        "versions": "EQ(*)"
-    }, {
-        "action": "run query",
-        "description": "Query ThreatQ and grab attributes",
-        "type": "investigate",
-        "identifier": "query_tq_attributes",
-        "read_only": true,
-        "parameters": {
-            "query": {
-                "description": "Query",
-                "data_type": "string",
-                "contains": ["domain", "ip", "email", "url", "hash", "string"],
-                "primary": true,
-                "required": true
-            }
+    "actions": [
+        {
+            "action": "test connectivity",
+            "description": "Validate the asset configuration for connectivity.",
+            "type": "test",
+            "identifier": "test_asset_connectivity",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
         },
-        "render": {
-            "type": "table",
-            "width": 12,
-            "height": 5,
-            "title": "TQ Attribute Results"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.query",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.id",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.name",
-            "data_type": "string",
-            "column_name": "Attribute Name",
-            "column_order": 0
-        }, {
-            "data_path": "action_result.data.*.attributes.*.value",
-            "data_type": "string",
-            "column_name": "Attribute Value",
-            "column_order": 1
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "create ioc",
-        "description": "Create IOC in ThreatQ",
-        "type": "investigate",
-        "identifier": "add_indicator",
-        "read_only": true,
-        "parameters": {
-            "indicator": {
-                "description": "indicator",
-                "data_type": "string",
-                "contains": ["domain", "ip", "email", "url", "hash", "string"],
-                "primary": true,
-                "required": true,
-                "order": 0
+        {
+            "action": "run query",
+            "description": "Query ThreatQ and grab attributes",
+            "type": "investigate",
+            "identifier": "query_tq_attributes",
+            "read_only": true,
+            "parameters": {
+                "query": {
+                    "description": "Query",
+                    "data_type": "string",
+                    "contains": [
+                        "domain",
+                        "ip",
+                        "email",
+                        "url",
+                        "hash",
+                        "string"
+                    ],
+                    "primary": true,
+                    "required": true
+                }
             },
-            "indicator_type": {
-                "description": "indicator type",
-                "data_type": "string",
-                "required": true,
-                "value_list": ["FQDN", "IP Address", "Email Address", "URL", "MD5", "SHA-1", "SHA-256", "SHA-512"],
-                "order": 1
+            "render": {
+                "type": "table",
+                "width": 12,
+                "height": 5,
+                "title": "TQ Attribute Results"
             },
-            "indicator_status": {
-                "description": "indicator status",
-                "data_type": "string",
-                "required": true,
-                "value_list": ["Active", "Review"],
-                "order": 2
-            }
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.query",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.name",
+                    "data_type": "string",
+                    "column_name": "Attribute Name",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.value",
+                    "data_type": "string",
+                    "column_name": "Attribute Value",
+                    "column_order": 1
+                }
+            ],
+            "versions": "EQ(*)"
         },
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_indicator",
-            "title": "TQ Action Result"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.indicator",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.indicator_type",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.indicator_status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.id",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.value",
-            "data_type": "string",
-            "contains": ["domain", "ip", "email", "url", "hash"]
-        }, {
-            "data_path": "action_result.data.*.type",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.url",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.existing",
-            "data_type": "boolean"
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "get related iocs",
-        "description": "Query ThreatQ for related IOCs",
-        "type": "investigate",
-        "identifier": "get_related_indicators",
-        "read_only": true,
-        "parameters": {
-            "query": {
-                "description": "Indicator to query",
-                "data_type": "string",
-                "contains": ["domain", "ip", "email", "url", "hash"],
-                "primary": true,
-                "required": true
-            }
-        },
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_related",
-            "title": "Related Indicators"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.query",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.id",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.value",
-            "data_type": "string",
-            "contains": ["domain", "ip", "email", "url", "hash"]
-        }, {
-            "data_path": "action_result.data.*.type",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.url",
-            "data_type": "string"
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "link ioc",
-        "description": "Link IOCs together",
-        "type": "investigate",
-        "identifier": "link_indicators",
-        "read_only": true,
-        "parameters": {
-            "indicator_1": {
-                "description": "Indicator",
-                "data_type": "string",
-                "contains": ["domain", "ip", "email", "url", "hash"],
-                "primary": true,
-                "required": true
+        {
+            "action": "create ioc",
+            "description": "Create IOC in ThreatQ",
+            "type": "investigate",
+            "identifier": "add_indicator",
+            "read_only": true,
+            "parameters": {
+                "indicator": {
+                    "description": "indicator",
+                    "data_type": "string",
+                    "contains": [
+                        "domain",
+                        "ip",
+                        "email",
+                        "url",
+                        "hash",
+                        "string"
+                    ],
+                    "primary": true,
+                    "required": true,
+                    "order": 0
+                },
+                "indicator_type": {
+                    "description": "indicator type",
+                    "data_type": "string",
+                    "required": true,
+                    "value_list": [
+                        "FQDN",
+                        "IP Address",
+                        "Email Address",
+                        "URL",
+                        "MD5",
+                        "SHA-1",
+                        "SHA-256",
+                        "SHA-512"
+                    ],
+                    "order": 1
+                },
+                "indicator_status": {
+                    "description": "indicator status",
+                    "data_type": "string",
+                    "required": true,
+                    "value_list": [
+                        "Active",
+                        "Review"
+                    ],
+                    "order": 2
+                }
             },
-            "indicator_2": {
-                "description": "Indicator to Link To",
-                "data_type": "string",
-                "contains": ["domain", "ip", "email", "url", "hash"],
-                "required": true
-            }
-        },
-        "render": {
-            "type": "table",
-            "width": 12,
-            "height": 5,
-            "title": "Link IOCs"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string",
-            "column_name": "Status",
-            "column_order": 2
-        }, {
-            "data_path": "action_result.parameter.indicator_1",
-            "data_type": "string",
-            "column_name": "Indicator #1",
-            "column_order": 0
-        }, {
-            "data_path": "action_result.parameter.indicator_2",
-            "data_type": "string",
-            "column_name": "Indicator #2",
-            "column_order": 1
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "create event",
-        "description": "Create event based on current container",
-        "type": "investigate",
-        "identifier": "create_event",
-        "read_only": true,
-        "parameters": {},
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_event",
-            "title": "TQ Action Result"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.eid",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.title",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.url",
-            "data_type": "string"
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "upload file",
-        "description": "Upload file from vault in current container",
-        "type": "investigate",
-        "identifier": "upload_files",
-        "read_only": true,
-        "parameters": {
-            "vault_id": {
-                "description": "Valult ID",
-                "data_type": "string",
-                "primary": true,
-                "required": true
-            }
-        },
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_file",
-            "title": "TQ Action Result"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.vault_id",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.fid",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.file_name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.url",
-            "data_type": "string"
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "domain reputation",
-        "description": "Get attributes, related indicators, and related adversaries",
-        "type": "investigate",
-        "identifier": "summarize_d",
-        "read_only": true,
-        "parameters": {
-            "query": {
-                "description": "Query",
-                "data_type": "string",
-                "contains": ["domain", "string"],
-                "primary": true,
-                "required": true
-            }
-        },
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_summarize",
-            "title": "TQ Action Result"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.query",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.status.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.type.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
-            "data_type": "string"
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "ip reputation",
-        "description": "Get attributes, related indicators, and related adversaries",
-        "type": "investigate",
-        "identifier": "summarize_i",
-        "read_only": true,
-        "parameters": {
-            "query": {
-                "description": "Query",
-                "data_type": "string",
-                "contains": ["ip", "string"],
-                "primary": true,
-                "required": true
-            }
-        },
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_summarize",
-            "title": "TQ Action Result"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.query",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.status.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.type.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
-            "data_type": "string"
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "email reputation",
-        "description": "Get attributes, related indicators, and related adversaries",
-        "type": "investigate",
-        "identifier": "summarize_e",
-        "read_only": true,
-        "parameters": {
-            "query": {
-                "description": "Query",
-                "data_type": "string",
-                "contains": ["email", "string"],
-                "primary": true,
-                "required": true
-            }
-        },
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_summarize",
-            "title": "TQ Action Result"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.query",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.status.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.type.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
-            "data_type": "string"
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "url reputation",
-        "description": "Get attributes, related indicators, and related adversaries",
-        "type": "investigate",
-        "identifier": "summarize_u",
-        "read_only": true,
-        "parameters": {
-            "query": {
-                "description": "Query",
-                "data_type": "string",
-                "contains": ["url", "string"],
-                "primary": true,
-                "required": true
-            }
-        },
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_summarize",
-            "title": "TQ Action Result"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.query",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.status.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.type.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
-            "data_type": "string"
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "file reputation",
-        "description": "Get attributes, related indicators, and related adversaries",
-        "type": "investigate",
-        "identifier": "summarize_f",
-        "read_only": true,
-        "parameters": {
-            "query": {
-                "description": "Query",
-                "data_type": "string",
-                "contains": ["hash", "string"],
-                "primary": true,
-                "required": true
-            }
-        },
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_summarize",
-            "title": "TQ Action Result"
-        },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.query",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.attributes.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.value",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.status.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.type.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
-            "data_type": "string"
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "update status",
-        "description": "Change Indicator Status in ThreatQ",
-        "type": "investigate",
-        "identifier": "change_status",
-        "read_only": true,
-        "parameters": {
-            "indicator": {
-                "description": "Indicator",
-                "data_type": "string",
-                "contains": ["domain", "ip", "email", "url", "hash", "string"],
-                "primary": true,
-                "required": true
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_indicator",
+                "title": "TQ Action Result"
             },
-            "new_status": {
-                "description": "New Status",
-                "data_type": "string",
-                "required": true
-            }
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.indicator",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string",
+                    "contains": [
+                        "domain",
+                        "ip",
+                        "email",
+                        "url",
+                        "hash"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.existing",
+                    "data_type": "boolean"
+                }
+            ],
+            "versions": "EQ(*)"
         },
-        "render": {
-            "type": "table",
-            "width": 12,
-            "height": 5,
-            "title": "Update Status"
+        {
+            "action": "get related iocs",
+            "description": "Query ThreatQ for related IOCs",
+            "type": "investigate",
+            "identifier": "get_related_indicators",
+            "read_only": true,
+            "parameters": {
+                "query": {
+                    "description": "Indicator to query",
+                    "data_type": "string",
+                    "contains": [
+                        "domain",
+                        "ip",
+                        "email",
+                        "url",
+                        "hash"
+                    ],
+                    "primary": true,
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_related",
+                "title": "Related Indicators"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.query",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string",
+                    "contains": [
+                        "domain",
+                        "ip",
+                        "email",
+                        "url",
+                        "hash"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string"
+                }
+            ],
+            "versions": "EQ(*)"
         },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.indicator",
-            "data_type": "string",
-            "column_name": "Indicator",
-            "column_order": 0
-        }, {
-            "data_path": "action_result.parameter.new_status",
-            "data_type": "string",
-            "column_name":  "New Status",
-            "column_order": 1
-        }],
-        "versions": "EQ(*)"
-    }, {
-        "action": "create adversary",
-        "description": "Create Adversary in ThreatQ",
-        "type": "investigate",
-        "identifier": "create_adversary",
-        "read_only": true,
-        "parameters": {
-            "adversary_name": {
-                "description": "Adversary Name",
-                "data_type": "string",
-                "contains": ["string"],
-                "primary": true,
-                "required": true
-            }
+        {
+            "action": "link ioc",
+            "description": "Link IOCs together",
+            "type": "investigate",
+            "identifier": "link_indicators",
+            "read_only": true,
+            "parameters": {
+                "indicator_1": {
+                    "description": "Indicator",
+                    "data_type": "string",
+                    "contains": [
+                        "domain",
+                        "ip",
+                        "email",
+                        "url",
+                        "hash"
+                    ],
+                    "primary": true,
+                    "required": true
+                },
+                "indicator_2": {
+                    "description": "Indicator to Link To",
+                    "data_type": "string",
+                    "contains": [
+                        "domain",
+                        "ip",
+                        "email",
+                        "url",
+                        "hash"
+                    ],
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "table",
+                "width": 12,
+                "height": 5,
+                "title": "Link IOCs"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_1",
+                    "data_type": "string",
+                    "column_name": "Indicator #1",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_2",
+                    "data_type": "string",
+                    "column_name": "Indicator #2",
+                    "column_order": 1
+                }
+            ],
+            "versions": "EQ(*)"
         },
-        "render": {
-            "type": "custom",
-            "width": 12,
-            "height": 5,
-            "view": "threatq_views.render_adversary",
-            "title": "TQ Action Result"
+        {
+            "action": "create event",
+            "description": "Create event based on current container",
+            "type": "investigate",
+            "identifier": "create_event",
+            "read_only": true,
+            "parameters": {},
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_event",
+                "title": "TQ Action Result"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.eid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string"
+                }
+            ],
+            "versions": "EQ(*)"
         },
-        "output": [{
-            "data_path": "action_result.summary",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.status",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.parameter.adversary_name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.aid",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.name",
-            "data_type": "string"
-        }, {
-            "data_path": "action_result.data.*.url",
-            "data_type": "string"
-        }],
-        "versions": "EQ(*)"
-    }]
+        {
+            "action": "upload file",
+            "description": "Upload file from vault in current container",
+            "type": "investigate",
+            "identifier": "upload_files",
+            "read_only": true,
+            "parameters": {
+                "vault_id": {
+                    "description": "Valult ID",
+                    "data_type": "string",
+                    "primary": true,
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_file",
+                "title": "TQ Action Result"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.vault_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.file_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string"
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "domain reputation",
+            "description": "Get attributes, related indicators, and related adversaries",
+            "type": "investigate",
+            "identifier": "summarize_d",
+            "read_only": true,
+            "parameters": {
+                "query": {
+                    "description": "Query",
+                    "data_type": "string",
+                    "contains": [
+                        "domain",
+                        "string"
+                    ],
+                    "primary": true,
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_summarize",
+                "title": "TQ Action Result"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.query",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.status.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.type.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
+                    "data_type": "string"
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "ip reputation",
+            "description": "Get attributes, related indicators, and related adversaries",
+            "type": "investigate",
+            "identifier": "summarize_i",
+            "read_only": true,
+            "parameters": {
+                "query": {
+                    "description": "Query",
+                    "data_type": "string",
+                    "contains": [
+                        "ip",
+                        "string"
+                    ],
+                    "primary": true,
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_summarize",
+                "title": "TQ Action Result"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.query",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.status.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.type.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
+                    "data_type": "string"
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "email reputation",
+            "description": "Get attributes, related indicators, and related adversaries",
+            "type": "investigate",
+            "identifier": "summarize_e",
+            "read_only": true,
+            "parameters": {
+                "query": {
+                    "description": "Query",
+                    "data_type": "string",
+                    "contains": [
+                        "email",
+                        "string"
+                    ],
+                    "primary": true,
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_summarize",
+                "title": "TQ Action Result"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.query",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.status.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.type.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
+                    "data_type": "string"
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "url reputation",
+            "description": "Get attributes, related indicators, and related adversaries",
+            "type": "investigate",
+            "identifier": "summarize_u",
+            "read_only": true,
+            "parameters": {
+                "query": {
+                    "description": "Query",
+                    "data_type": "string",
+                    "contains": [
+                        "url",
+                        "string"
+                    ],
+                    "primary": true,
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_summarize",
+                "title": "TQ Action Result"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.query",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.status.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.type.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
+                    "data_type": "string"
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "file reputation",
+            "description": "Get attributes, related indicators, and related adversaries",
+            "type": "investigate",
+            "identifier": "summarize_f",
+            "read_only": true,
+            "parameters": {
+                "query": {
+                    "description": "Query",
+                    "data_type": "string",
+                    "contains": [
+                        "hash",
+                        "string"
+                    ],
+                    "primary": true,
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_summarize",
+                "title": "TQ Action Result"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.query",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.attributes.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.status.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.type.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.indicators.*.adversaries.*.source_name",
+                    "data_type": "string"
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "update status",
+            "description": "Change Indicator Status in ThreatQ",
+            "type": "investigate",
+            "identifier": "change_status",
+            "read_only": true,
+            "parameters": {
+                "indicator": {
+                    "description": "Indicator",
+                    "data_type": "string",
+                    "contains": [
+                        "domain",
+                        "ip",
+                        "email",
+                        "url",
+                        "hash",
+                        "string"
+                    ],
+                    "primary": true,
+                    "required": true
+                },
+                "new_status": {
+                    "description": "New Status",
+                    "data_type": "string",
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "table",
+                "width": 12,
+                "height": 5,
+                "title": "Update Status"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.indicator",
+                    "data_type": "string",
+                    "column_name": "Indicator",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.new_status",
+                    "data_type": "string",
+                    "column_name": "New Status",
+                    "column_order": 1
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "create adversary",
+            "description": "Create Adversary in ThreatQ",
+            "type": "investigate",
+            "identifier": "create_adversary",
+            "read_only": true,
+            "parameters": {
+                "adversary_name": {
+                    "description": "Adversary Name",
+                    "data_type": "string",
+                    "contains": [
+                        "string"
+                    ],
+                    "primary": true,
+                    "required": true
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 5,
+                "view": "threatq_views.render_adversary",
+                "title": "TQ Action Result"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.adversary_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.aid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string"
+                }
+            ],
+            "versions": "EQ(*)"
+        }
+    ]
 }
