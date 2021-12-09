@@ -925,5 +925,17 @@
             ],
             "versions": "EQ(*)"
         }
-    ]
+    ],
+    "pip_dependencies": {
+        "wheel": [
+            {
+                "module": "python_dateutil",
+                "input_file": "wheels/python_dateutil-2.8.1-py2.py3-none-any.whl"
+            },
+            {
+                "module": "six",
+                "input_file": "wheels/six-1.16.0-py2.py3-none-any.whl"
+            }
+        ]
+    }
 }
